@@ -7,6 +7,7 @@
         "plugin:react/recommended",
         "airbnb"
     ],
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
@@ -46,6 +47,7 @@
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
         "react/prop-types": "off",
-        "no-unused-vars": "off"
+        "no-unused-vars": "off",
+        "max-len": "off"
     }
 }

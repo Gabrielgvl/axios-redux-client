@@ -5,6 +5,7 @@ import useJwtAuth from '@gabrielgvl/jwt_auth_react';
 import useWriteCache from './useWriteCache';
 import useReadCache from './useReadCache';
 import { useSelector } from '../store';
+import { UseAxiosInterface } from '../types';
 
 const useAxiosHook = makeUseAxios({
   axios: axios.create({ }),
@@ -27,13 +28,13 @@ const useAxios = (
     url,
     idProperty,
     method,
-    manual,
-    config = {},
-    params,
-  },
+    manual = method.toLowerCase() !== 'get',
+    options = {},
+    params = {},
+  } : UseAxiosInterface,
 ) => {
-  const baseUrl = useSelector((state) => state.baseUrl);
-  const notificationHandler = useSelector((state) => state.notificationHandler);
+  const baseUrl = useSelector((state) => state.config.baseUrl);
+  const notificationHandler = useSelector((state) => state.config.notificationHandler);
   const { setAll, addOne, upsertOne } = useWriteCache(queryName);
   const { selectedAll, selectedById } = useReadCache(queryName, params[idProperty]);
   const { token } = useJwtAuth();
@@ -48,7 +49,7 @@ const useAxios = (
       validateStatus(status) {
         return status >= 200 && status < 500;
       },
-      ...config,
+      ...options,
     },
     {
       manual,
@@ -57,32 +58,31 @@ const useAxios = (
 
   useEffect(() => {
     if (!response || !response.config) return;
-    function handleCache() {
-      try {
-        switch (response.config.method) {
-          case 'get':
-            if (idProperty in params) {
-              upsertOne(data);
-            } else {
-              setAll(data);
-            }
-            break;
-          case 'post':
-            addOne(data);
-            break;
-          case 'put':
-          case 'delete':
+    try {
+      switch (response.config.method) {
+        case 'get':
+          if (idProperty in params) {
             upsertOne(data);
-            break;
-          default:
-            console.log('Not Implemented');
-        }
-      } catch (e) {
-        console.log(e);
+          } else {
+            setAll(data);
+          }
+          break;
+        case 'post':
+          addOne(data);
+          break;
+        case 'put':
+        case 'delete':
+          upsertOne(data);
+          break;
+        default:
+          console.log('Not Implemented');
       }
+    } catch (e) {
+      console.log(e);
     }
-    handleCache();
-    notificationHandler(response);
+    if (notificationHandler) {
+      notificationHandler(response);
+    }
   }, [response, loading, error]);
 
   return [{

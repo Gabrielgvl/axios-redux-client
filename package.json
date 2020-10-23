@@ -2,12 +2,13 @@
   "name": "axios-redux-client",
   "version": "0.0.1",
   "main": "build/index.js",
-  "module": "src/index.js",
+  "types": "build/index.d.ts",
+  "module": "src/index.tsx",
   "scripts": {
     "build": "rollup -c",
     "start": "rollup -c -w",
     "prepublish": "rm -rf ./dist && yarn build",
-    "lint": "eslint --cache --format codeframe --ext mjs,js src"
+    "lint": "eslint --cache --format codeframe --ext mjs,tsx src"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.12.1",
@@ -16,6 +17,9 @@
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-typescript": "^5.0.2",
     "@types/react": "^16.9.49",
+    "@types/react-redux": "^7.1.9",
+    "@typescript-eslint/eslint-plugin": "4.0.1",
+    "@typescript-eslint/parser": "4.0.1",
     "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
@@ -36,14 +40,16 @@
     "react-scripts": "3.4.1",
     "rollup": "^2.23.0",
     "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-json": "^4.0.0"
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-typescript2": "^0.28.0"
   },
   "dependencies": {
     "@babel/plugin-transform-react-jsx-self": "^7.12.1",
     "@gabrielgvl/jwt_auth_react": "^1.0.7",
     "@reduxjs/toolkit": "^1.4.0",
     "axios": "^0.20.0",
-    "axios-hooks": "^2.1.0"
+    "axios-hooks": "^2.1.0",
+    "typescript": "~3.7.2"
   },
   "peerDependencies": {
     "react": "^16.13.1",

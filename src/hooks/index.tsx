@@ -1,3 +1,4 @@
+import useJwtAuth from '@gabrielgvl/jwt_auth_react';
 import useDelete from './useDelete';
 import useEdit from './useEdit';
 import useGet from './useGet';
@@ -8,5 +9,5 @@ import useReadCache from './useReadCache';
 import useWriteCache from './useWriteCache';
 
 export {
-  useDelete, useEdit, useGet, useList, usePost, useQuery, useReadCache, useWriteCache,
+  useDelete, useEdit, useGet, useList, usePost, useQuery, useReadCache, useWriteCache, useJwtAuth,
 };
