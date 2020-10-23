@@ -1,0 +1,64 @@
+{
+  "name": "axios-redux-client",
+  "version": "0.0.1",
+  "main": "build/index.js",
+  "module": "src/index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -c -w",
+    "prepublish": "rm -rf ./dist && yarn build",
+    "lint": "eslint --cache --format codeframe --ext mjs,js src"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-react-jsx": "^7.12.1",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-react": "^7.12.1",
+    "@rollup/plugin-commonjs": "^14.0.0",
+    "@rollup/plugin-typescript": "^5.0.2",
+    "@types/react": "^16.9.49",
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-runtime": "^6.26.0",
+    "eslint": "^7.8.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.0",
+    "prop-types": "^15.7.2",
+    "react-scripts": "3.4.1",
+    "rollup": "^2.23.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-json": "^4.0.0"
+  },
+  "dependencies": {
+    "@babel/plugin-transform-react-jsx-self": "^7.12.1",
+    "@gabrielgvl/jwt_auth_react": "^1.0.7",
+    "@reduxjs/toolkit": "^1.4.0",
+    "axios": "^0.20.0",
+    "axios-hooks": "^2.1.0"
+  },
+  "peerDependencies": {
+    "react": "^16.13.1",
+    "react-redux": "^7.2.1",
+    "redux": "^4.0.5"
+  },
+  "keywords": [
+    "axios",
+    "client",
+    "redux",
+    "hooks",
+    "react",
+    "store"
+  ],
+  "author": "Gabriel Vinhaes",
+  "license": "MIT",
+  "homepage": "https://github.com/Gabrielgvl/jwt_auth_react"
+}
