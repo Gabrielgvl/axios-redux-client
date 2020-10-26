@@ -3,7 +3,7 @@ import { useSelector } from '../store';
 import { UseQueryInterface } from '../types';
 
 const usePost = (queryName: string, props: UseQueryInterface) => {
-  const queries = useSelector((state) => state.config.cruds);
+  const queries = useSelector((state) => state._config.cruds);
   const crud = queries[queryName];
   return queryMaker({
     url: crud.postUrl || crud.url,

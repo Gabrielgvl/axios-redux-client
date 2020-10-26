@@ -8,15 +8,15 @@ import {
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import entityGenerator from '../entity/entityGenerator';
-import { AxiosClientState } from '../types';
+import { AxiosClientInterface, AxiosClientState } from '../types';
 import { createEmptyReducer } from './utils';
 
 const initialState: AxiosClientState = {
   _slices: {},
   _adapters: {},
   _config: {
-    queries: [],
-    cruds: [],
+    queries: {},
+    cruds: {},
     baseUrl: '/',
     auth: 'jwt',
   },
@@ -32,19 +32,30 @@ export const useDispatch = createDispatchHook(ClientContext);
 // @ts-ignore
 export const useSelector: TypedUseSelectorHook<AxiosClientState> = createSelectorHook(ClientContext);
 
-const ClientProvider = ({ config, children }) => {
+const ClientProvider: React.FC<AxiosClientInterface> = ({ config, children }) => {
   const clientStore = useMemo(() => {
     const fullConfig = { ...initialState._config, ...config };
     const { queries, cruds } = fullConfig;
+    const queryList = Object.entries(queries);
+    const crudsList = Object.entries(cruds);
     // map queries to an object with key = queryName and value = queryReducer
-    const reducers = queries.concat(cruds)
-      .reduce((obj, e) => ({ ...obj, [e.queryName]: entityGenerator(e).slice.reducer }), {});
+    const reducers = queryList.concat(crudsList)
+      .reduce((obj, [queryName, entity]) => ({
+        ...obj,
+        [queryName]: entityGenerator({ queryName, idProperty: entity.idProperty, sortComparer: entity.sortComparer }).slice.reducer,
+      }), {});
     // map queries to an object with key = queryName and value = querySlice
-    const slices = queries.concat(cruds)
-      .reduce((obj, e) => ({ ...obj, [e.queryName]: entityGenerator(e).slice }), {});
+    const slices = queryList.concat(crudsList)
+      .reduce((obj, [queryName, entity]) => ({
+        ...obj,
+        [queryName]: entityGenerator({ queryName, idProperty: entity.idProperty, sortComparer: entity.sortComparer }).slice,
+      }), {});
     // map queries to an object with key = queryName and value = queryAdapter
-    const adapters = queries.concat(cruds)
-      .reduce((obj, e) => ({ ...obj, [e.queryName]: entityGenerator(e).adapter }), {});
+    const adapters = queryList.concat(crudsList)
+      .reduce((obj, [queryName, entity]) => ({
+        ...obj,
+        [queryName]: entityGenerator({ queryName, idProperty: entity.idProperty, sortComparer: entity.sortComparer }).adapter,
+      }), {});
 
     return configureStore({
       reducer: combineReducers({

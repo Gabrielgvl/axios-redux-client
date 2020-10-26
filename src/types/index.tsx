@@ -7,12 +7,15 @@ export interface BaseEntity {
 
 export interface BaseQuery {
     url: string,
-    queryName: string,
     method: 'get' | 'GET' | 'post' | 'POST' | 'put' | 'PUT' | 'delete' | 'DELETE',
 }
 
 export interface QueryEntity extends BaseQuery, BaseEntity{
     sortComparer?: (a, b) => number,
+}
+
+export interface Queries {
+    [queryName: string]: QueryEntity,
 }
 
 export interface CrudQuery extends QueryEntity {
@@ -24,9 +27,13 @@ export interface CrudQuery extends QueryEntity {
     putUrl?: string,
 }
 
+export interface Cruds {
+    [queryName: string]: CrudQuery,
+}
+
 export interface Config {
-    queries: Array<QueryEntity>,
-    cruds: Array<CrudQuery>,
+    queries: Queries,
+    cruds: Cruds,
     baseUrl?: string,
     notificationHandler?: (response) => {},
     auth: 'jwt' | null,
@@ -39,6 +46,7 @@ export interface UseQueryInterface {
 }
 
 export interface UseAxiosInterface extends BaseQuery, BaseEntity, UseQueryInterface {
+    queryName: string,
 }
 
 export interface AxiosClientInterface {
