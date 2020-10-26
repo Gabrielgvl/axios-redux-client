@@ -6,7 +6,7 @@ const queryMaker = ({
   queryName,
   method,
   idProperty,
-}: UseAxiosInterface) => ({ manual, options, params }: UseQueryInterface) => useAxios({
+}: UseAxiosInterface) => ({ manual, options, params }: UseQueryInterface = {}) => useAxios({
   url, idProperty, method, queryName, manual, options, params,
 });
 

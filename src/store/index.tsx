@@ -3,69 +3,45 @@ import {
   Provider,
   createStoreHook,
   createDispatchHook,
-  createSelectorHook, TypedUseSelectorHook,
+  createSelectorHook, TypedUseSelectorHook, ReactReduxContextValue,
 } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+import { AnyAction, configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
+import logger from 'redux-logger';
 import entityGenerator from '../entity/entityGenerator';
-import { AxiosClientInterface, AxiosClientState } from '../types';
-import { createEmptyReducer } from './utils';
+import { AxiosClientState } from '../types';
+import useAxiosContext from '../context/useAxiosContext';
 
-const initialState: AxiosClientState = {
-  _slices: {},
-  _adapters: {},
-  _config: {
-    queries: {},
-    cruds: {},
-    baseUrl: '/',
-    auth: 'jwt',
-  },
-};
-
-const ClientContext = React.createContext<Partial<AxiosClientState>>(initialState);
+const ClientContext = React.createContext(
+    {} as ReactReduxContextValue<any, AnyAction>,
+);
 
 // Export custom hooks
-// @ts-ignore
 export const useStore = createStoreHook(ClientContext);
-// @ts-ignore
 export const useDispatch = createDispatchHook(ClientContext);
-// @ts-ignore
 export const useSelector: TypedUseSelectorHook<AxiosClientState> = createSelectorHook(ClientContext);
 
-const ClientProvider: React.FC<AxiosClientInterface> = ({ config, children }) => {
+const ClientProvider = ({ children }) => {
+  const { config } = useAxiosContext();
   const clientStore = useMemo(() => {
-    const fullConfig = { ...initialState._config, ...config };
-    const { queries, cruds } = fullConfig;
+    const { queries, cruds } = config;
     const queryList = Object.entries(queries);
     const crudsList = Object.entries(cruds);
+
     // map queries to an object with key = queryName and value = queryReducer
     const reducers = queryList.concat(crudsList)
       .reduce((obj, [queryName, entity]) => ({
         ...obj,
         [queryName]: entityGenerator({ queryName, idProperty: entity.idProperty, sortComparer: entity.sortComparer }).slice.reducer,
       }), {});
-    // map queries to an object with key = queryName and value = querySlice
-    const slices = queryList.concat(crudsList)
-      .reduce((obj, [queryName, entity]) => ({
-        ...obj,
-        [queryName]: entityGenerator({ queryName, idProperty: entity.idProperty, sortComparer: entity.sortComparer }).slice,
-      }), {});
-    // map queries to an object with key = queryName and value = queryAdapter
-    const adapters = queryList.concat(crudsList)
-      .reduce((obj, [queryName, entity]) => ({
-        ...obj,
-        [queryName]: entityGenerator({ queryName, idProperty: entity.idProperty, sortComparer: entity.sortComparer }).adapter,
-      }), {});
 
     return configureStore({
-      reducer: combineReducers({
-        ...reducers, _slices: createEmptyReducer(slices), _adapters: createEmptyReducer(adapters), _config: createEmptyReducer(fullConfig),
-      }),
+      reducer: combineReducers(reducers),
+      middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
     });
   }, [config]);
 
   return (
-  // @ts-ignore
     <Provider context={ClientContext} store={clientStore}>
       {children}
     </Provider>

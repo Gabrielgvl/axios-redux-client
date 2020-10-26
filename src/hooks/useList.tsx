@@ -1,11 +1,11 @@
 import queryMaker from '../queries';
-import { useSelector } from '../store';
 import { UseQueryInterface } from '../types';
+import useAxiosContext from '../context/useAxiosContext';
 
 const useList = (queryName: string, props: UseQueryInterface) => {
-  const queries = useSelector((state) => state);
-  console.log(queries);
-  const crud = queries[queryName];
+  const { config } = useAxiosContext();
+  const { cruds } = config;
+  const crud = cruds[queryName];
   return queryMaker({
     url: crud.listUrl || crud.url,
     queryName,

@@ -31,12 +31,14 @@ export interface Cruds {
     [queryName: string]: CrudQuery,
 }
 
+export type AuthType = 'jwt' | null
+
 export interface Config {
     queries: Queries,
     cruds: Cruds,
     baseUrl?: string,
     notificationHandler?: (response) => {},
-    auth: 'jwt' | null,
+    auth: AuthType,
 }
 
 export interface UseQueryInterface {
@@ -55,7 +57,5 @@ export interface AxiosClientInterface {
 }
 
 export interface AxiosClientState {
-    _slices: any,
-    _adapters: any,
-    _config: Config,
+    renderPromises?: Record<any, any>;
 }

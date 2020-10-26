@@ -2,18 +2,17 @@ import React from 'react';
 import { JwtAuthProvider } from '@gabrielgvl/jwt_auth_react';
 import ClientProvider from './store';
 import { AxiosClientInterface } from './types';
+import { AxiosProvider } from './context';
 
 const AxiosClient: React.FC<AxiosClientInterface> = ({ config, children }) => (
   <JwtAuthProvider keyPrefix="axios-client">
-    <ClientProvider config={config}>
-      {children}
-    </ClientProvider>
+    <AxiosProvider config={config}>
+      <ClientProvider>
+        {children}
+      </ClientProvider>
+    </AxiosProvider>
   </JwtAuthProvider>
 );
-
-// export {
-//   useDelete, useEdit, useGet, useList, usePost, useReadCache, useWriteCache, useQuery,
-// };
 
 export * from './hooks';
 

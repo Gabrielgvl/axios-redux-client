@@ -1,7 +1,8 @@
-import { useDispatch, useSelector } from '../store';
+import { useDispatch } from '../store';
+import useAxiosContext from '../context/useAxiosContext';
 
 const useWriteCache = (entity) => {
-  const slices = useSelector((state) => state._slices);
+  const { slices } = useAxiosContext();
   const dispatch = useDispatch();
 
   const addOne = (data) => {

@@ -4,8 +4,8 @@ import axios from 'axios';
 import useJwtAuth from '@gabrielgvl/jwt_auth_react';
 import useWriteCache from './useWriteCache';
 import useReadCache from './useReadCache';
-import { useSelector } from '../store';
 import { UseAxiosInterface } from '../types';
+import useAxiosContext from '../context/useAxiosContext';
 
 const useAxiosHook = makeUseAxios({
   axios: axios.create({ }),
@@ -33,7 +33,7 @@ const useAxios = (
     params = {},
   } : UseAxiosInterface,
 ) => {
-  const config = useSelector((state) => state._config);
+  const { config } = useAxiosContext();
   const { baseUrl, notificationHandler } = config;
   const { setAll, addOne, upsertOne } = useWriteCache(queryName);
   const { selectedAll, selectedById } = useReadCache(queryName, params[idProperty]);

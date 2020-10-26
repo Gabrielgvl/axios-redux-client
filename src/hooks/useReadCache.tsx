@@ -1,8 +1,9 @@
 import { shallowEqual } from 'react-redux';
 import { useSelector } from '../store';
+import useAxiosContext from '../context/useAxiosContext';
 
 const useReadCache = (entity, id) => {
-  const adapters = useSelector((state) => state._adapters);
+  const { adapters } = useAxiosContext();
   const selectors = adapters[entity].getSelectors();
 
   const selectedAll = useSelector((state) => selectors.selectAll(state[entity]),
