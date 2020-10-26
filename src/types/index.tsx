@@ -32,10 +32,13 @@ export interface Config {
     auth: 'jwt' | null,
 }
 
-export interface UseAxiosInterface extends BaseQuery, BaseEntity {
+export interface UseQueryInterface {
     manual?: boolean,
     options?: AxiosRequestConfig,
     params?: Object,
+}
+
+export interface UseAxiosInterface extends BaseQuery, BaseEntity, UseQueryInterface {
 }
 
 export interface AxiosClientInterface {
@@ -44,7 +47,7 @@ export interface AxiosClientInterface {
 }
 
 export interface AxiosClientState {
-    slices: any,
-    adapters: any,
-    config: Config,
+    _slices: any,
+    _adapters: any,
+    _config: Config,
 }

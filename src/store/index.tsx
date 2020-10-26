@@ -9,11 +9,12 @@ import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import entityGenerator from '../entity/entityGenerator';
 import { AxiosClientState } from '../types';
+import { createEmptyReducer } from './utils';
 
 const initialState: AxiosClientState = {
-  slices: {},
-  adapters: {},
-  config: {
+  _slices: {},
+  _adapters: {},
+  _config: {
     queries: [],
     cruds: [],
     baseUrl: '/',
@@ -33,19 +34,22 @@ export const useSelector: TypedUseSelectorHook<AxiosClientState> = createSelecto
 
 const ClientProvider = ({ config, children }) => {
   const clientStore = useMemo(() => {
+    const fullConfig = { ...initialState._config, ...config };
+    const { queries, cruds } = fullConfig;
     // map queries to an object with key = queryName and value = queryReducer
-    const reducers = config.queries.concat(config.cruds)
+    const reducers = queries.concat(cruds)
       .reduce((obj, e) => ({ ...obj, [e.queryName]: entityGenerator(e).slice.reducer }), {});
     // map queries to an object with key = queryName and value = querySlice
-    const slices = config.queries.concat(config.cruds)
+    const slices = queries.concat(cruds)
       .reduce((obj, e) => ({ ...obj, [e.queryName]: entityGenerator(e).slice }), {});
     // map queries to an object with key = queryName and value = queryAdapter
-    const adapters = config.queries.concat(config.cruds)
+    const adapters = queries.concat(cruds)
       .reduce((obj, e) => ({ ...obj, [e.queryName]: entityGenerator(e).adapter }), {});
 
     return configureStore({
-      reducer: combineReducers(reducers),
-      preloadedState: { slices, adapters, config },
+      reducer: combineReducers({
+        ...reducers, _slices: createEmptyReducer(slices), _adapters: createEmptyReducer(adapters), _config: createEmptyReducer(fullConfig),
+      }),
     });
   }, [config]);
 

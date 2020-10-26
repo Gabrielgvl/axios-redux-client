@@ -1,12 +1,12 @@
 import useAxios from '../hooks/useAxios';
-import { QueryEntity, UseAxiosInterface } from '../types';
+import { QueryEntity, UseQueryInterface } from '../types';
 
 const queryMaker = ({
   url,
   queryName,
   method,
   idProperty,
-}: QueryEntity) => ({ manual, options, params }: UseAxiosInterface) => useAxios({
+}: QueryEntity) => ({ manual, options, params }: UseQueryInterface) => useAxios({
   url, idProperty, method, queryName, manual, options, params,
 });
 

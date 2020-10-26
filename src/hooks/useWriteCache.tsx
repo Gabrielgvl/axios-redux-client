@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from '../store';
 
 const useWriteCache = (entity) => {
-  const slices = useSelector((state) => state.slices);
+  const slices = useSelector((state) => state._slices);
   const dispatch = useDispatch();
 
   const addOne = (data) => {

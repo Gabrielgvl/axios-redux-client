@@ -2,7 +2,7 @@ import { shallowEqual } from 'react-redux';
 import { useSelector } from '../store';
 
 const useReadCache = (entity, id) => {
-  const adapters = useSelector((state) => state.adapters);
+  const adapters = useSelector((state) => state._adapters);
   const selectors = adapters[entity].getSelectors();
 
   const selectedAll = useSelector((state) => selectors.selectAll(state[entity]),

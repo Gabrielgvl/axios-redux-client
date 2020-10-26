@@ -1,8 +1,8 @@
 import queryMaker from '../queries';
 import { useSelector } from '../store';
-import { UseAxiosInterface } from '../types';
+import { UseQueryInterface } from '../types';
 
-const useGet = (queryName: string, props: UseAxiosInterface) => {
+const useGet = (queryName: string, props: UseQueryInterface) => {
   const queries = useSelector((state) => state.config.cruds);
   const crud = queries[queryName];
   return queryMaker({

@@ -33,8 +33,8 @@ const useAxios = (
     params = {},
   } : UseAxiosInterface,
 ) => {
-  const baseUrl = useSelector((state) => state.config.baseUrl);
-  const notificationHandler = useSelector((state) => state.config.notificationHandler);
+  const config = useSelector((state) => state._config);
+  const { baseUrl, notificationHandler } = config;
   const { setAll, addOne, upsertOne } = useWriteCache(queryName);
   const { selectedAll, selectedById } = useReadCache(queryName, params[idProperty]);
   const { token } = useJwtAuth();
