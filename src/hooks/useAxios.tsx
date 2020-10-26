@@ -11,7 +11,7 @@ const useAxiosHook = makeUseAxios({
   axios: axios.create({ }),
 });
 
-const urlRegexp = /\${(\w+)}/g;
+const urlRegexp = /:{(\w+)}/g;
 
 const replaceUrl = (url, params) => {
   const matches = [...url.matchAll(urlRegexp)];
