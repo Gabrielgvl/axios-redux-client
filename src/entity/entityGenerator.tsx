@@ -10,7 +10,7 @@ export interface EntityGenerated {
 }
 
 const entityGenerator = ({
-  queryName, idProperty, sortComparer, isCrud,
+  queryName, idProperty, sortComparer,
 }): EntityGenerated => {
   const entityAdapter = createEntityAdapter<BaseEntity>({
     selectId: (entity) => entity[idProperty],
@@ -18,7 +18,7 @@ const entityGenerator = ({
   });
 
   const entitySlice = createSlice({
-    name: queryName + isCrud ? 'CRUD' : '',
+    name: queryName,
     initialState: entityAdapter.getInitialState(),
     reducers: {
       addOne: entityAdapter.addOne,
