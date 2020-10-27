@@ -1,11 +1,20 @@
 import React from 'react';
-import { AuthType, Config } from '../types';
+import { EntityAdapter, Slice, ReducersMapObject } from '@reduxjs/toolkit';
+import { AuthType, BaseEntity, Config } from '../types';
+
+interface AdaptersInterface {
+    [queryName: string]: EntityAdapter<BaseEntity>
+}
+
+interface SlicesInterface {
+    [queryName: string]: Slice
+}
 
 export interface AxiosContextInterface {
     config: Config;
-    slices?: any,
-    adapters?: any,
-    reducers?: any,
+    slices?: SlicesInterface,
+    adapters?: AdaptersInterface,
+    reducers?: ReducersMapObject,
     renderPromises?: Record<any, any>;
 }
 

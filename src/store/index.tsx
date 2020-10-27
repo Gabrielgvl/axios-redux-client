@@ -23,7 +23,7 @@ export const useSelector: TypedUseSelectorHook<AxiosClientState> = createSelecto
 const ClientProvider = ({ children }) => {
   const { reducers } = useAxiosContext();
   const clientStore = useMemo(() => configureStore({
-    reducer: combineReducers(reducers),
+    reducer: combineReducers(reducers || {}),
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
   }), [reducers]);
 

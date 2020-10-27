@@ -4,7 +4,8 @@ import useAxiosContext from '../context/useAxiosContext';
 
 const useReadCache = (entity, id) => {
   const { adapters } = useAxiosContext();
-  const selectors = adapters[entity].getSelectors();
+
+  const selectors = (adapters || {})[entity].getSelectors();
 
   const selectedAll = useSelector((state) => selectors.selectAll(state[entity]),
     shallowEqual);
