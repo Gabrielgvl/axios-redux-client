@@ -1,6 +1,6 @@
 {
   "name": "axios-redux-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "module": "build/index.es.ts",
@@ -85,5 +85,5 @@
   ],
   "author": "Gabriel Vinhaes",
   "license": "MIT",
-  "homepage": "https://github.com/Gabrielgvl/jwt_auth_react"
+  "homepage": "https://github.com/Gabrielgvl/axios-redux-client"
 }
