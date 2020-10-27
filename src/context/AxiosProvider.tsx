@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { getAxiosContext } from './AxiosContext';
-import { Config } from '../types';
+import { Config, QueryEntity } from '../types';
 import entityGenerator, { EntityGenerated } from '../entity/entityGenerator';
 
 export interface AxiosProviderProps {
@@ -21,10 +21,10 @@ export const AxiosProvider: React.FC<AxiosProviderProps> = ({
         if (config && context.config !== config) {
           newContext = { ...context, config: { ...newContext.config, ...config } };
           const { queries, cruds } = config;
-          const queryList = Object.entries(queries || {});
-          const crudsList = Object.entries(cruds || {});
+          const queryList = Object.entries<QueryEntity>(queries);
+          const crudsList = Object.entries<QueryEntity>(cruds);
 
-          const entities = queryList.concat(crudsList)
+          const entities = queryList.concat(crudsList).filter(([, entity]) => entity.idProperty)
             .reduce((obj, [queryName, entity]) => ({
               ...obj,
               [queryName]: entityGenerator({

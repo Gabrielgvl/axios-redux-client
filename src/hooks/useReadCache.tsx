@@ -5,12 +5,19 @@ import useAxiosContext from '../context/useAxiosContext';
 const useReadCache = (entity, id) => {
   const { adapters } = useAxiosContext();
 
-  const selectors = (adapters || {})[entity].getSelectors();
+  const entityAdapter = adapters ? adapters[entity] : null;
 
-  const selectedAll = useSelector((state) => selectors.selectAll(state[entity]),
-    shallowEqual);
-  const selectedById = useSelector((state) => selectors.selectById(state[entity], id),
-    shallowEqual);
+  const selectedAll = useSelector((state) => {
+    if (!entityAdapter) return null;
+    return entityAdapter.getSelectors().selectAll(state[entity]);
+  },
+  shallowEqual);
+
+  const selectedById = useSelector((state) => {
+    if (!entityAdapter) return null;
+    return entityAdapter.getSelectors().selectById(state[entity], id);
+  },
+  shallowEqual);
 
   return { selectedAll, selectedById };
 };

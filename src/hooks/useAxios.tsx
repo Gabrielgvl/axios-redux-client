@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { makeUseAxios } from 'axios-hooks';
 import axios from 'axios';
 import useJwtAuth from '@gabrielgvl/jwt_auth_react';
-import { useHistory } from 'react-router-dom';
 import useWriteCache from './useWriteCache';
 import useReadCache from './useReadCache';
 import { UseAxiosInterface } from '../types';
@@ -41,7 +40,6 @@ const useAxios = (
   const { setAll, addOne, upsertOne } = useWriteCache(queryName);
   const { selectedAll, selectedById } = useReadCache(queryName, params[idProperty]);
   const jwtAuth = useJwtAuth();
-  const history = useHistory();
   const { snack, ...notistacks } = useNotistack();
 
   const [{
@@ -63,7 +61,7 @@ const useAxios = (
 
   useEffect(() => {
     if (!response || !response.config) return;
-    try {
+    if (upsertOne && setAll && addOne) {
       switch (response.config.method) {
         case 'get':
           if (idProperty in params) {
@@ -82,12 +80,10 @@ const useAxios = (
         default:
           console.log('Not Implemented');
       }
-    } catch (e) {
-      console.log(e);
     }
     if (responseHandler) {
       const handler = responseHandler({
-        response, queryName, history, jwtAuth,
+        response, queryName, jwtAuth,
       });
       if (handler) {
         const { message, type } = handler;
@@ -103,7 +99,7 @@ const useAxios = (
   }, [response, loading, error]);
 
   return [{
-    response, error, data: selectedById || selectedAll, loading,
+    response, error, data: selectedById || selectedAll || data, loading,
   }, execute];
 };
 

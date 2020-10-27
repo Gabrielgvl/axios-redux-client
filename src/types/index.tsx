@@ -1,6 +1,5 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import React from 'react';
-import { History } from 'history';
 import { UseJwtAuthReturn } from '@gabrielgvl/jwt_auth_react';
 
 export interface BaseEntity {
@@ -43,7 +42,6 @@ export interface ErrorHandler {
 export interface ResponseHandlerParams {
     response: AxiosResponse,
     queryName: string,
-    history: History,
     jwtAuth: UseJwtAuthReturn,
 }
 
