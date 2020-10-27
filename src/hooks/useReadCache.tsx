@@ -2,7 +2,7 @@ import { shallowEqual } from 'react-redux';
 import { useSelector } from '../store';
 import useAxiosContext from '../context/useAxiosContext';
 
-const useReadCache = (entity, id) => {
+const useReadCache = (entity: string, id?: string | number) => {
   const { adapters } = useAxiosContext();
 
   const entityAdapter = adapters ? adapters[entity] : null;
@@ -14,7 +14,7 @@ const useReadCache = (entity, id) => {
   shallowEqual);
 
   const selectedById = useSelector((state) => {
-    if (!entityAdapter) return null;
+    if (!entityAdapter || !id) return null;
     return entityAdapter.getSelectors().selectById(state[entity], id);
   },
   shallowEqual);

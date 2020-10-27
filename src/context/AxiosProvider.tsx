@@ -20,7 +20,7 @@ export const AxiosProvider: React.FC<AxiosProviderProps> = ({
         let newContext = context;
         if (config && context.config !== config) {
           newContext = { ...context, config: { ...newContext.config, ...config } };
-          const { queries, cruds } = config;
+          const { queries, cruds } = newContext.config;
           const queryList = Object.entries<QueryEntity>(queries);
           const crudsList = Object.entries<QueryEntity>(cruds);
 
@@ -30,7 +30,7 @@ export const AxiosProvider: React.FC<AxiosProviderProps> = ({
               [queryName]: entityGenerator({
                 queryName, idProperty: entity.idProperty, sortComparer: entity.sortComparer,
               }),
-            }), {});
+            }), { _notification: entityGenerator({ queryName: '_notification', idProperty: 'id' }) });
 
           const entityEntries = Object.entries<EntityGenerated>(entities);
 

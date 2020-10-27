@@ -69,5 +69,6 @@ export interface AxiosClientInterface {
 }
 
 export interface AxiosClientState {
+    _notifications?: Array<any>;
     renderPromises?: Record<any, any>;
 }

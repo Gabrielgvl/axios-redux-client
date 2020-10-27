@@ -35,8 +35,20 @@ const useWriteCache = (entity) => {
     }
   };
 
+  const removeOne = (id) => {
+    if (slices && entity in slices) {
+      dispatch(slices[entity].actions.removeOne(id));
+    }
+  };
+
+  const removeAll = () => {
+    if (slices && entity in slices) {
+      dispatch(slices[entity].actions.removeAll(entity));
+    }
+  };
+
   return {
-    addOne, addMany, setAll, upsertOne, upsertMany,
+    addOne, addMany, setAll, upsertOne, upsertMany, removeAll, removeOne,
   };
 };
 

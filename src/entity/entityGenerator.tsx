@@ -9,9 +9,15 @@ export interface EntityGenerated {
   slice: Slice,
 }
 
+export interface EntityGeneratorInterface {
+  queryName: string,
+  idProperty: string | number,
+  sortComparer?: (a, b) => number
+}
+
 const entityGenerator = ({
   queryName, idProperty, sortComparer,
-}): EntityGenerated => {
+}: EntityGeneratorInterface): EntityGenerated => {
   const entityAdapter = createEntityAdapter<BaseEntity>({
     selectId: (entity) => entity[idProperty],
     sortComparer,
@@ -28,6 +34,9 @@ const entityGenerator = ({
       updateMany: entityAdapter.updateMany,
       upsertOne: entityAdapter.upsertOne,
       upsertMany: entityAdapter.upsertMany,
+      removeOne: entityAdapter.removeOne,
+      removeMany: entityAdapter.removeMany,
+      removeAll: entityAdapter.removeAll,
     },
   });
 

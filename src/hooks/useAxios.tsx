@@ -6,7 +6,7 @@ import useWriteCache from './useWriteCache';
 import useReadCache from './useReadCache';
 import { UseAxiosInterface } from '../types';
 import useAxiosContext from '../context/useAxiosContext';
-import useNotistack from './useNotistack';
+import { useNotifications } from './index';
 
 const useAxiosHook = makeUseAxios({
   axios: axios.create({ }),
@@ -39,8 +39,8 @@ const useAxios = (
   const { baseUrl, responseHandler } = config;
   const { setAll, addOne, upsertOne } = useWriteCache(queryName);
   const { selectedAll, selectedById } = useReadCache(queryName, params[idProperty]);
+  const { addNotification } = useNotifications();
   const jwtAuth = useJwtAuth();
-  const { snack, ...notistacks } = useNotistack();
 
   const [{
     response, error, data, loading,
@@ -82,17 +82,11 @@ const useAxios = (
       }
     }
     if (responseHandler) {
-      const handler = responseHandler({
+      const notification = responseHandler({
         response, queryName, jwtAuth,
       });
-      if (handler) {
-        const { message, type } = handler;
-        if (type) {
-          const typeSnack = notistacks[`${type}Snack`];
-          typeSnack(message);
-        } else {
-          snack(message);
-        }
+      if (notification) {
+        addNotification(notification);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
