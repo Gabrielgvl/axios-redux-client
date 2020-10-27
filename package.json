@@ -1,6 +1,6 @@
 {
   "name": "axios-redux-client",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "module": "build/index.es.ts",
@@ -50,9 +50,9 @@
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-react-hooks": "^4.1.0",
     "prop-types": "^15.7.2",
-    "react-scripts": "3.4.1",
     "react": "^16.13.1",
     "react-redux": "^7.2.1",
+    "react-scripts": "3.4.1",
     "redux": "^4.0.5",
     "rollup": "^2.23.0",
     "rollup-plugin-auto-named-exports": "^1.0.0-beta.3",
