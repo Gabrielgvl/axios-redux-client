@@ -1,9 +1,7 @@
 # Axios Redux Client
 📜 Client for Axios, with built-in integration for Redux.
 
-[![NPM Version][npm-image]][npm-url]
-[![Build Status][travis-image]][travis-url]
-[![Downloads Stats][npm-downloads]][npm-url]
+[![npm version](https://badge.fury.io/js/axios-redux-client.svg)](https://badge.fury.io/js/axios-redux-client)
 
 💡 This package will reduce your work when configuring Redux's environment. You will be able to make fast requests with very little configuration and it will save it directly to Redux's store. Also, it is fully compatible with hooks!
 
