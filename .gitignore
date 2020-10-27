@@ -121,4 +121,4 @@ dist
 /build
 
 /.yalc
-
+yalc.lock

@@ -49,7 +49,7 @@ export interface Config {
     queries: Queries,
     cruds: Cruds,
     baseUrl?: string,
-    responseHandler?: (response) => ErrorHandler,
+    responseHandler?: ({ response, queryName: string, jwtAuth }) => ErrorHandler,
     auth: AuthType,
 }
 
