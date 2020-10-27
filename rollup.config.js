@@ -2,7 +2,6 @@ import babel from 'rollup-plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from 'rollup-plugin-typescript2';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import nodePolyfills from 'rollup-plugin-node-polyfills';
 import builtins from 'rollup-plugin-node-builtins';
 import nodeGlobals from 'rollup-plugin-node-globals';
 import json from '@rollup/plugin-json';
@@ -18,15 +17,8 @@ export default [{
       sourcemap: true,
       strict: false,
     },
-    // {
-    //   file: pkg.module,
-    //   format: 'es',
-    // },
   ],
   plugins: [
-    // replace({
-    //   'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-    // }),
     babel({
       exclude: 'node_modules/**',
       presets: ['@babel/preset-env', '@babel/preset-react'],
@@ -36,7 +28,6 @@ export default [{
     commonjs({
       include: ['src', 'src/hooks', 'node_modules/**'],
     }),
-    nodePolyfills(),
     nodeResolve({
       mainFields: ['main'],
       browser: true,

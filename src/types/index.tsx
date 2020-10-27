@@ -1,5 +1,7 @@
-import { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import React from 'react';
+import { History } from 'history';
+import { UseJwtAuthReturn } from '@gabrielgvl/jwt_auth_react';
 
 export interface BaseEntity {
     idProperty: string | number,
@@ -33,11 +35,23 @@ export interface Cruds {
 
 export type AuthType = 'jwt' | null
 
+export interface ErrorHandler {
+    message: string
+    type?: 'success' | 'error' | 'info' | 'warning'
+}
+
+export interface ResponseHandlerParams {
+    response: AxiosResponse,
+    queryName: string,
+    history: History,
+    jwtAuth: UseJwtAuthReturn,
+}
+
 export interface Config {
     queries: Queries,
     cruds: Cruds,
     baseUrl?: string,
-    notificationHandler?: (response) => {},
+    responseHandler?: (response) => ErrorHandler,
     auth: AuthType,
 }
 

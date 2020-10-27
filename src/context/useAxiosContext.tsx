@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { getAxiosContext } from './AxiosContext';
+import { AxiosContextInterface, getAxiosContext } from './AxiosContext';
 
-const useAxiosContext = () => useContext(getAxiosContext());
+const useAxiosContext = ():AxiosContextInterface => useContext(getAxiosContext());
 
 export default useAxiosContext;

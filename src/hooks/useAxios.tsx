@@ -2,10 +2,12 @@ import { useEffect } from 'react';
 import { makeUseAxios } from 'axios-hooks';
 import axios from 'axios';
 import useJwtAuth from '@gabrielgvl/jwt_auth_react';
+import { useHistory } from 'react-router-dom';
 import useWriteCache from './useWriteCache';
 import useReadCache from './useReadCache';
 import { UseAxiosInterface } from '../types';
 import useAxiosContext from '../context/useAxiosContext';
+import useNotistack from './useNotistack';
 
 const useAxiosHook = makeUseAxios({
   axios: axios.create({ }),
@@ -35,16 +37,18 @@ const useAxios = (
   } : UseAxiosInterface,
 ) => {
   const { config } = useAxiosContext();
-  const { baseUrl, notificationHandler } = config;
+  const { baseUrl, responseHandler } = config;
   const { setAll, addOne, upsertOne } = useWriteCache(queryName);
   const { selectedAll, selectedById } = useReadCache(queryName, params[idProperty]);
-  const { token } = useJwtAuth();
+  const jwtAuth = useJwtAuth();
+  const history = useHistory();
+  const { snack, ...notistacks } = useNotistack();
 
   const [{
     response, error, data, loading,
   }, execute] = useAxiosHook(
     {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${jwtAuth.token}` },
       url: baseUrl + replaceUrl(url, params),
       method,
       validateStatus(status) {
@@ -81,9 +85,21 @@ const useAxios = (
     } catch (e) {
       console.log(e);
     }
-    if (notificationHandler) {
-      notificationHandler(response);
+    if (responseHandler) {
+      const handler = responseHandler({
+        response, queryName, history, jwtAuth,
+      });
+      if (handler) {
+        const { message, type } = handler;
+        if (type) {
+          const typeSnack = notistacks[`${type}Snack`];
+          typeSnack(message);
+        } else {
+          snack(message);
+        }
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, loading, error]);
 
   return [{
