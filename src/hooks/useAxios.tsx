@@ -15,11 +15,12 @@ const urlRegexp = /&{(\w+)}/g;
 
 const replaceUrl = (url, params) => {
   const matches = [...url.matchAll(urlRegexp)];
-
+  let newUrl = url;
   // replace first group (${ATTR}) with params[second group] (params[ATTR])
-  matches.forEach((match) => url.replace(match[0], params[match[1]]));
-
-  return url;
+  matches.forEach((match) => {
+    newUrl = url.replace(match[0], params[match[1]]);
+  });
+  return newUrl;
 };
 
 const useAxios = (

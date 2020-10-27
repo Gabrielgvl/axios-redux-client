@@ -1,17 +1,24 @@
 import {
   createEntityAdapter,
-  createSlice,
+  createSlice, EntityAdapter, Slice,
 } from '@reduxjs/toolkit';
 import { BaseEntity } from '../types';
 
-const entityGenerator = ({ queryName, idProperty, sortComparer }) => {
+export interface EntityGenerated {
+  adapter: EntityAdapter<BaseEntity>,
+  slice: Slice,
+}
+
+const entityGenerator = ({
+  queryName, idProperty, sortComparer, isCrud,
+}): EntityGenerated => {
   const entityAdapter = createEntityAdapter<BaseEntity>({
     selectId: (entity) => entity[idProperty],
     sortComparer,
   });
 
   const entitySlice = createSlice({
-    name: queryName,
+    name: queryName + isCrud ? 'CRUD' : '',
     initialState: entityAdapter.getInitialState(),
     reducers: {
       addOne: entityAdapter.addOne,

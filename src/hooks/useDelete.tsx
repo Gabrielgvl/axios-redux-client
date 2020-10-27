@@ -7,7 +7,7 @@ const useDelete = (queryName: string, props: UseQueryInterface) => {
   const { cruds } = config;
   const crud = cruds[queryName];
   return queryMaker({
-    url: crud.deleteUrl || crud.url,
+    url: crud.deleteUrl || `${crud.url}/&{${crud.idProperty}}`,
     queryName,
     method: 'DELETE',
     idProperty: crud.idProperty,

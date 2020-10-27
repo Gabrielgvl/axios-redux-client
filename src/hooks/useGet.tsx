@@ -7,7 +7,7 @@ const useGet = (queryName: string, props: UseQueryInterface) => {
   const { cruds } = config;
   const crud = cruds[queryName];
   return queryMaker({
-    url: crud.getUrl || crud.url,
+    url: crud.getUrl || `${crud.url}/&{${crud.idProperty}}`,
     queryName,
     method: 'GET',
     idProperty: crud.idProperty,

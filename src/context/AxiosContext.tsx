@@ -5,6 +5,7 @@ export interface AxiosContextInterface {
     config: Config;
     slices?: any,
     adapters?: any,
+    reducers?: any,
     renderPromises?: Record<any, any>;
 }
 
