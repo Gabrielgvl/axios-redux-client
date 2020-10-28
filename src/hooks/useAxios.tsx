@@ -7,9 +7,17 @@ import useReadCache from './useReadCache';
 import { UseAxiosInterface } from '../types';
 import useAxiosContext from '../context/useAxiosContext';
 import { useNotifications } from './index';
+import { requestLogger, responseLogger } from '../utils/logger';
+
+const getAxiosInstance = () => {
+  const axiosInstance = axios.create();
+  axiosInstance.interceptors.request.use(requestLogger);
+  axiosInstance.interceptors.response.use(responseLogger);
+  return axiosInstance;
+};
 
 const useAxiosHook = makeUseAxios({
-  axios: axios.create({ }),
+  axios: getAxiosInstance(),
 });
 
 const urlRegexp = /&{(\w+)}/g;
