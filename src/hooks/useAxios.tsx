@@ -6,7 +6,7 @@ import useReadCache from './useReadCache';
 import { UseAxiosInterface } from '../types';
 import useAxiosContext from '../context/useAxiosContext';
 import { useNotifications } from './index';
-import { requestLogger, responseLogger } from '../utils/axios-logger';
+import { requestLogger, responseLogger } from '../utils/logger';
 
 const getAxiosInstance = () => {
   const axiosInstance = axios.create();
