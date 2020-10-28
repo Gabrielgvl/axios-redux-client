@@ -6,8 +6,13 @@ const queryMaker = ({
   queryName,
   method,
   idProperty,
-}: UseAxiosInterface) => ({ manual, options, params }: UseQueryInterface = {}) => useAxios({
-  url, idProperty, method, queryName, manual, options, params,
-});
+}: UseAxiosInterface) => {
+  if (!url || !method) {
+    throw Error(`${queryName} doesn't have url or method!`);
+  }
+  return ({ manual, options, params }: UseQueryInterface = {}) => useAxios({
+    url, idProperty, method, queryName, manual, options, params,
+  });
+};
 
 export default queryMaker;
