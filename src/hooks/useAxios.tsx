@@ -1,13 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { makeUseAxios } from 'axios-hooks';
-import axios from 'axios';
-import useJwtAuth from '@gabrielgvl/jwt_auth_react';
+import axios, { AxiosRequestConfig } from 'axios';
 import useWriteCache from './useWriteCache';
 import useReadCache from './useReadCache';
 import { UseAxiosInterface } from '../types';
 import useAxiosContext from '../context/useAxiosContext';
 import { useNotifications } from './index';
-import { requestLogger, responseLogger } from '../utils/logger';
+import { requestLogger, responseLogger } from '../utils/axios-logger';
 
 const getAxiosInstance = () => {
   const axiosInstance = axios.create();
@@ -44,28 +43,29 @@ const useAxios = (
   } : UseAxiosInterface,
 ) => {
   const { config } = useAxiosContext();
-  const { baseUrl, responseHandler } = config;
+  const { baseUrl, responseHandler, getRequestConfig } = config;
   const { setAll, addOne, upsertOne } = useWriteCache(queryName);
   const { selectedAll, selectedById } = useReadCache(queryName, params[idProperty]);
   const { addNotification } = useNotifications();
-  const jwtAuth = useJwtAuth();
 
-  const [{
-    response, error, data, loading,
-  }, execute] = useAxiosHook(
-    {
-      headers: { Authorization: `Bearer ${jwtAuth.token}` },
+  const requestConfig = useMemo(() => {
+    const defaultRequestConfig: AxiosRequestConfig = {
       url: baseUrl + replaceUrl(url, params),
       method,
       validateStatus(status) {
         return status >= 200 && status < 500;
       },
       ...options,
-    },
-    {
-      manual,
-    },
-  );
+    };
+    if (getRequestConfig) {
+      return getRequestConfig(defaultRequestConfig);
+    }
+    return defaultRequestConfig;
+  }, [baseUrl, getRequestConfig, method, options, params, url]);
+
+  const [{
+    response, error, data, loading,
+  }, execute] = useAxiosHook(requestConfig, { manual });
 
   useEffect(() => {
     if (!response || !response.config) return;
@@ -90,9 +90,7 @@ const useAxios = (
       }
     }
     if (responseHandler) {
-      const notification = responseHandler({
-        response, queryName, jwtAuth,
-      });
+      const notification = responseHandler({ response, queryName });
       if (notification) {
         addNotification(notification);
       }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { EntityAdapter, Slice, ReducersMapObject } from '@reduxjs/toolkit';
-import { AuthType, BaseEntity, Config } from '../types';
+import { BaseEntity, Config } from '../types';
 
 interface AdaptersInterface {
     [queryName: string]: EntityAdapter<BaseEntity>
@@ -22,7 +22,6 @@ const configDefault = {
   queries: {},
   cruds: {},
   baseUrl: '/',
-  auth: 'jwt' as AuthType,
 };
 
 const contextSymbol = typeof Symbol === 'function' && Symbol.for
