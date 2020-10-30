@@ -1,6 +1,6 @@
 {
   "name": "axios-redux-client",
-  "version": "0.1.2",
+  "version": "0.1.21",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "module": "build/index.es.ts",
@@ -64,7 +64,6 @@
     "rollup-plugin-typescript2": "^0.28.0"
   },
   "dependencies": {
-    "@gabrielgvl/jwt_auth_react": "file:.yalc/@gabrielgvl/jwt_auth_react",
     "@reduxjs/toolkit": "^1.4.0",
     "redux-logger": "^3.0.6",
     "typescript": "4.0.5"
