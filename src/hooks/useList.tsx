@@ -2,7 +2,7 @@ import queryMaker from '../queries';
 import { UseQueryInterface } from '../types';
 import useAxiosContext from '../context/useAxiosContext';
 
-const useList = (queryName: string, props: UseQueryInterface) => {
+const useList = (queryName: string, props?: UseQueryInterface) => {
   const { config } = useAxiosContext();
   const { cruds } = config;
   const crud = cruds[queryName];

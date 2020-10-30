@@ -69,7 +69,7 @@ const useAxios = (
 
   useEffect(() => {
     if (!response || !response.config) return;
-    if (upsertOne && setAll && addOne) {
+    if (response.status < 400 && upsertOne && setAll && addOne) {
       switch (response.config.method) {
         case 'get':
           if (idProperty in params) {
