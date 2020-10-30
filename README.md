@@ -236,10 +236,16 @@ The config object accepts five configurations.
 
 - `responseHandler` - A function which passes `{ response, queryName: string, jwtAuth }` for handling the responses.
 
-- `auth` - Auth used. Currently only supports JWT, using [@gabrielgvl/jwt-auth-react](https://github.com/Gabrielgvl/jwt_auth_react).
+- `getRequestConfig` - A function which passes `config: AxiosRequestConfig` for handling the default request configurations. Must return an `AxiosRequestConfig`.
 
 ## 🗃 Changelog
 
+* 0.1.2
+    * Request and Response Logging
+    * Removed JWT Auth and implemented `getRequestConfig`
+    * Bug Fixes
+* 0.1.1
+    * Bug Fixes
 * 0.1.0
     * First release!
 * 0.0.1
