@@ -5,7 +5,7 @@ import useWriteCache from './useWriteCache';
 import useReadCache from './useReadCache';
 import { UseAxiosInterface } from '../types';
 import useAxiosContext from '../context/useAxiosContext';
-import { useNotifications } from './index';
+import useNotifications from './useNotifications';
 import { requestLogger, responseLogger } from '../utils/logger';
 
 const getAxiosInstance = () => {
