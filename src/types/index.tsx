@@ -42,9 +42,9 @@ export interface ResponseHandlerParams {
 }
 
 export interface Config {
-    queries: Queries,
-    cruds: Cruds,
-    baseUrl?: string,
+    queries?: Queries,
+    cruds?: Cruds,
+    baseUrl: string,
     responseHandler?: ({ response, queryName: string }) => ErrorHandler,
     getRequestConfig?: (requestConfig: AxiosRequestConfig) => AxiosRequestConfig,
 }
