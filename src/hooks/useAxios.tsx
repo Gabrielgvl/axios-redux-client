@@ -4,9 +4,9 @@ import axios, { AxiosRequestConfig } from 'axios';
 import useWriteCache from './useWriteCache';
 import useReadCache from './useReadCache';
 import { UseAxiosInterface } from '../types';
-import useAxiosContext from '../context/useAxiosContext';
 import useNotifications from './useNotifications';
 import { requestLogger, responseLogger } from '../utils/logger';
+import useClientConfig from './useClientConfig';
 
 const getAxiosInstance = () => {
   const axiosInstance = axios.create();
@@ -42,8 +42,7 @@ const useAxios = (
     params = {},
   } : UseAxiosInterface,
 ) => {
-  const { config } = useAxiosContext();
-  const { baseUrl, responseHandler, getRequestConfig } = config;
+  const { baseUrl, responseHandler, getRequestConfig } = useClientConfig();
   const { setAll, addOne, upsertOne } = useWriteCache(queryName);
   const { selectedAll, selectedById } = useReadCache(queryName, params[idProperty]);
   const { addNotification } = useNotifications();

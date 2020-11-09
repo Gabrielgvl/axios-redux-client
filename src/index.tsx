@@ -3,8 +3,8 @@ import ClientProvider from './store';
 import { AxiosClientInterface } from './types';
 import { AxiosProvider } from './context';
 
-const AxiosClient: React.FC<AxiosClientInterface> = ({ config, children }) => (
-  <AxiosProvider config={config}>
+const AxiosClient: React.FC<AxiosClientInterface> = ({ useConfiguration, children }) => (
+  <AxiosProvider useConfiguration={useConfiguration}>
     <ClientProvider>
       {children}
     </ClientProvider>

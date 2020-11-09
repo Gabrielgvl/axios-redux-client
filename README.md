@@ -30,18 +30,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import AxiosClient from 'axios-redux-client';
 
-const config = {
-  queries: {
-    getObjects: {
-      url: '/object', method: 'GET',
+const useConfiguration = () =>
+  return {
+    queries: {
+      getObjects: {
+        url: '/object', method: 'GET',
+      },
     },
-  },
-  baseUrl: 'http://localhost:8080',
-  auth: 'jwt',
+    baseUrl: 'http://localhost:8080',
+    auth: 'jwt',
 };
 
 ReactDOM.render(
-  <AxiosClient config={config}>
+  <AxiosClient useConfiguration={useConfiguration}>
     <MyComponent />
   </AxiosClient>,
 document.getElementById('root'),
@@ -71,39 +72,40 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import AxiosClient from 'axios-redux-client';
 
-const config = {
-  queries: {
-    getObjects: {
-      url: '/object',
-       method: 'GET', 
-       idProperty: "id",
-       sortComparer: (a, b) => a.name.localeCompare(b.name),
+const useConfiguration = () =>
+  return {
+    queries: {
+      getObjects: {
+        url: '/object',
+         method: 'GET', 
+         idProperty: "id",
+         sortComparer: (a, b) => a.name.localeCompare(b.name),
+      },
+      login: {
+        url: '/login',
+        method: 'POST',
+      },
     },
-    login: {
-      url: '/login',
-      method: 'POST',
+    cruds: {
+       crudBasic: {
+        url: "/basic",
+        idProperty: '_id',
+        sortComparer: (a, b) => a.name.localeCompare(b.name),
+      },
+       crudComplex: {
+           url: "/complex",
+           idProperty: '_id',
+           sortComparer: (a, b) => a.value - b.value,
+           deleteUrl: "/complex/delete/&{id}",
+       }
     },
-  },
-  cruds: {
-     crudBasic: {
-      url: "/basic",
-      idProperty: '_id',
-      sortComparer: (a, b) => a.name.localeCompare(b.name),
-    },
-     crudComplex: {
-         url: "/complex",
-         idProperty: '_id',
-         sortComparer: (a, b) => a.value - b.value,
-         deleteUrl: "/complex/delete/&{id}",
-     }
-  },
   responseHandler = ({ response, queryName }) => response.status === 200 ? console.log(queryName + " worked!") : console.log(response)
   baseUrl: 'http://localhost:8080',
   auth: 'jwt',
 };
 
 ReactDOM.render(
-  <AxiosClient config={config}>
+  <AxiosClient useConfiguration={useConfiguration}>
     <MyComponent />
   </AxiosClient>,
 document.getElementById('root'),
@@ -141,7 +143,7 @@ import AxiosClient, { useQuery,  useEdit, useGet, useList,
 
   Provides Axios Client Context.
 
-  - `config` - A Config Object.
+  - `useConfiguration` - A Hook that return a Config Object.
   - `children` - React Node.
 
 - #### useQuery
@@ -202,9 +204,9 @@ import AxiosClient, { useQuery,  useEdit, useGet, useList,
 
 
 
-## 🛠 Config
+## 🛠 useConfiguration
 
-The config object accepts five configurations.
+The useConfiguration hook must return five objects.
 
 - `queries` - An object like:
 
@@ -240,6 +242,9 @@ The config object accepts five configurations.
 
 ## 🗃 Changelog
 
+* 0.2.0
+    * Removed Config
+    * Added useConfiguration for use hooks in responseHandler and getRequestConfig
 * 0.1.2
     * Request and Response Logging
     * Removed JWT Auth and implemented `getRequestConfig`

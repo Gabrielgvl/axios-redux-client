@@ -41,7 +41,7 @@ export interface ResponseHandlerParams {
     queryName: string,
 }
 
-export interface Config {
+export interface UseConfigInterface {
     queries?: Queries,
     cruds?: Cruds,
     baseUrl: string,
@@ -60,7 +60,7 @@ export interface UseAxiosInterface extends BaseQuery, BaseEntity, UseQueryInterf
 }
 
 export interface AxiosClientInterface {
-    config: Config,
+    useConfiguration: () => UseConfigInterface,
     children: React.ReactNode
 }
 
