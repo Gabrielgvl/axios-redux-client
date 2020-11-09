@@ -1,26 +1,28 @@
 import React from 'react';
 
 import { getAxiosContext } from './AxiosContext';
-import { Config, QueryEntity } from '../types';
+import { QueryEntity, UseConfigInterface } from '../types';
 import entityGenerator, { EntityGenerated } from '../entity/entityGenerator';
+import { configDefault } from '../utils/constants';
 
 export interface AxiosProviderProps {
-    config: Config;
+    useConfiguration: () => UseConfigInterface,
     children: React.ReactNode | React.ReactNode[] | null;
 }
 
 export const AxiosProvider: React.FC<AxiosProviderProps> = ({
-  config,
+  useConfiguration,
   children,
 }) => {
   const AxiosContext = getAxiosContext();
+  const config = useConfiguration();
   return (
     <AxiosContext.Consumer>
       {(context: any = {}) => {
         let newContext = context;
         if (config && context.config !== config) {
-          newContext = { ...context, config: { ...newContext.config, ...config } };
-          const { queries, cruds } = newContext.config;
+          const fullConfig = { ...configDefault, ...config };
+          const { queries, cruds } = fullConfig;
           const queryList = Object.entries<QueryEntity>(queries);
           const crudsList = Object.entries<QueryEntity>(cruds);
 
@@ -55,7 +57,7 @@ export const AxiosProvider: React.FC<AxiosProviderProps> = ({
               [queryName]: entity.adapter,
             }), {});
           newContext = {
-            slices, adapters, reducers, ...newContext,
+            slices, adapters, reducers, useConfiguration,
           };
         }
         return (

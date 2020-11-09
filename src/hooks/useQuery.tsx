@@ -1,10 +1,9 @@
 import queryMaker from '../queries';
 import { UseQueryInterface } from '../types';
-import useAxiosContext from '../context/useAxiosContext';
+import useClientConfig from './useClientConfig';
 
 const useQuery = (queryName: string, props?: UseQueryInterface) => {
-  const { config } = useAxiosContext();
-  const { queries } = config;
+  const { queries } = useClientConfig();
   return queryMaker({ queryName, ...queries[queryName] })(props);
 };
 
