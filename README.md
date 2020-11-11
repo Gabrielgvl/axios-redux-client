@@ -37,7 +37,7 @@ const useConfiguration = () =>
         url: '/object', method: 'GET',
       },
     },
-    baseUrl: 'http://localhost:8080',
+    baseURL: 'http://localhost:8080',
     auth: 'jwt',
 };
 
@@ -100,7 +100,7 @@ const useConfiguration = () =>
        }
     },
   responseHandler = ({ response, queryName }) => response.status === 200 ? console.log(queryName + " worked!") : console.log(response)
-  baseUrl: 'http://localhost:8080',
+  baseURL: 'http://localhost:8080',
   auth: 'jwt',
 };
 
@@ -234,7 +234,7 @@ The useConfiguration hook must return five objects.
       }
   ```
 
-- `baseUrl` - The host url.
+- `baseURL` - The host url.
 
 - `responseHandler` - A function which passes `{ response, queryName: string, jwtAuth }` for handling the responses.
 

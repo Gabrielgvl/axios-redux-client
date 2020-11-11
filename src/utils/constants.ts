@@ -1,5 +1,12 @@
+import { ConfigInterface } from 'swr/dist/types';
+
 export const configDefault = {
   queries: {},
   cruds: {},
-  baseUrl: '/',
+  baseURL: '/',
+};
+
+export const defaultSWRConfig: ConfigInterface = {
+  suspense: true,
+
 };

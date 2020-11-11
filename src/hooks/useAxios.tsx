@@ -42,14 +42,14 @@ const useAxios = (
     params = {},
   } : UseAxiosInterface,
 ) => {
-  const { baseUrl, responseHandler, getRequestConfig } = useClientConfig();
+  const { baseURL, responseHandler, getRequestConfig } = useClientConfig();
   const { setAll, addOne, upsertOne } = useWriteCache(queryName);
   const { selectedAll, selectedById } = useReadCache(queryName, params[idProperty]);
   const { addNotification } = useNotifications();
 
   const requestConfig = useMemo(() => {
     const defaultRequestConfig: AxiosRequestConfig = {
-      url: baseUrl + replaceUrl(url, params),
+      url: baseURL + replaceUrl(url, params),
       method,
       validateStatus(status) {
         return status >= 200 && status < 500;
@@ -60,7 +60,7 @@ const useAxios = (
       return getRequestConfig(defaultRequestConfig);
     }
     return defaultRequestConfig;
-  }, [baseUrl, getRequestConfig, method, options, params, url]);
+  }, [baseURL, getRequestConfig, method, options, params, url]);
 
   const [{
     response, error, data, loading,
