@@ -1,6 +1,6 @@
 {
   "name": "axios-redux-client",
-  "version": "0.2.12",
+  "version": "0.2.13",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "module": "build/index.es.ts",
