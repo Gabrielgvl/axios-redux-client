@@ -1,9 +1,11 @@
-import { useEffect, useMemo } from 'react';
-import { makeUseAxios } from 'axios-hooks';
-import axios, { AxiosRequestConfig } from 'axios';
+import {
+  useEffect, useMemo,
+} from 'react';
+import { makeUseAxios, ResponseValues } from 'axios-hooks';
+import axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
 import useWriteCache from './useWriteCache';
 import useReadCache from './useReadCache';
-import { UseAxiosInterface } from '../types';
+import { AxiosRefetch, UseAxiosInterface } from '../types';
 import useNotifications from './useNotifications';
 import { requestLogger, responseLogger } from '../utils/logger';
 import useClientConfig from './useClientConfig';
@@ -22,6 +24,7 @@ const useAxiosHook = makeUseAxios({
 const urlRegexp = /&{(\w+)}/g;
 
 const replaceUrl = (url, params) => {
+  if (!params) return url;
   const matches = [...url.matchAll(urlRegexp)];
   let newUrl = url;
   // replace first group (${ATTR}) with params[second group] (params[ATTR])
@@ -41,9 +44,12 @@ const useAxios = (
     options = {},
     params = {},
   } : UseAxiosInterface,
-) => {
+): [ResponseValues<any>, (fetchProps?: AxiosRefetch
+) => AxiosPromise ] => {
   const { baseUrl, responseHandler, getRequestConfig } = useClientConfig();
-  const { setAll, addOne, upsertOne } = useWriteCache(queryName);
+  const {
+    setAll, addOne, upsertOne,
+  } = useWriteCache(queryName);
   const { selectedAll, selectedById } = useReadCache(queryName, params[idProperty]);
   const { addNotification } = useNotifications();
 
@@ -65,6 +71,11 @@ const useAxios = (
   const [{
     response, error, data, loading,
   }, execute] = useAxiosHook(requestConfig, { manual });
+
+  const refetch = (fetchProps: AxiosRefetch): AxiosPromise => {
+    const { params: innerParams, ...props } = fetchProps;
+    return execute({ url: baseUrl + replaceUrl(url, { ...params, ...innerParams }), ...props });
+  };
 
   useEffect(() => {
     if (!response || !response.config) return;
@@ -99,7 +110,7 @@ const useAxios = (
 
   return [{
     response, error, data: selectedById || selectedAll || data, loading,
-  }, execute];
+  }, refetch];
 };
 
 export default useAxios;

@@ -30,9 +30,9 @@ export const AxiosProvider: React.FC<AxiosProviderProps> = ({
             .reduce((obj, [queryName, entity]) => ({
               ...obj,
               [queryName]: entityGenerator({
-                queryName, idProperty: entity.idProperty, sortComparer: entity.sortComparer,
+                queryName, idProperty: entity.idProperty!, sortComparer: entity.sortComparer,
               }),
-            }), { _notification: entityGenerator({ queryName: '_notification', idProperty: 'id' }) });
+            }), {});
 
           const entityEntries = Object.entries<EntityGenerated>(entities);
 

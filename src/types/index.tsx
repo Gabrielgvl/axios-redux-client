@@ -1,4 +1,12 @@
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import {
+  AxiosAdapter,
+  AxiosBasicCredentials, AxiosProxyConfig,
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosTransformer, CancelToken,
+  Method,
+  ResponseType,
+} from 'axios';
 import React from 'react';
 
 export interface BaseEntity {
@@ -10,7 +18,8 @@ export interface BaseQuery {
     method: 'get' | 'GET' | 'post' | 'POST' | 'put' | 'PUT' | 'delete' | 'DELETE',
 }
 
-export interface QueryEntity extends BaseQuery, BaseEntity{
+export interface QueryEntity extends BaseQuery {
+    idProperty?: string | number,
     sortComparer?: (a, b) => number,
 }
 
@@ -67,4 +76,36 @@ export interface AxiosClientInterface {
 export interface AxiosClientState {
     _notifications?: Array<any>;
     renderPromises?: Record<any, any>;
+}
+
+export interface AxiosRefetch extends AxiosRequestConfig {
+    params?: Record<string, unknown>;
+    url?: string;
+    method?: Method;
+    baseURL?: string;
+    transformRequest?: AxiosTransformer | AxiosTransformer[];
+    transformResponse?: AxiosTransformer | AxiosTransformer[];
+    headers?: any;
+    paramsSerializer?: (params: any) => string;
+    data?: any;
+    timeout?: number;
+    timeoutErrorMessage?: string;
+    withCredentials?: boolean;
+    adapter?: AxiosAdapter;
+    auth?: AxiosBasicCredentials;
+    responseType?: ResponseType;
+    xsrfCookieName?: string;
+    xsrfHeaderName?: string;
+    onUploadProgress?: (progressEvent: ProgressEvent) => void;
+    onDownloadProgress?: (progressEvent: ProgressEvent) => void;
+    maxContentLength?: number;
+    validateStatus?: ((status: number) => boolean | null);
+    maxBodyLength?: number;
+    maxRedirects?: number;
+    socketPath?: string | null;
+    httpAgent?: any;
+    httpsAgent?: any;
+    proxy?: AxiosProxyConfig | false;
+    cancelToken?: CancelToken;
+    decompress?: boolean;
 }
