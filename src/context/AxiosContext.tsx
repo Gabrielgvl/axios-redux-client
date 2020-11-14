@@ -1,5 +1,6 @@
 import React from 'react';
 import { EntityAdapter, Slice, ReducersMapObject } from '@reduxjs/toolkit';
+import useAxios, { UseAxios } from 'axios-hooks';
 import { BaseEntity, UseConfigInterface } from '../types';
 import { configDefault } from '../utils/constants';
 
@@ -12,11 +13,12 @@ interface SlicesInterface {
 }
 
 export interface AxiosContextInterface {
-    useConfiguration: () => UseConfigInterface;
+    useConfiguration: () => UseConfigInterface,
     slices?: SlicesInterface,
     adapters?: AdaptersInterface,
     reducers?: ReducersMapObject,
-    renderPromises?: Record<any, any>;
+    renderPromises?: Record<any, any>,
+    useAxiosHook: UseAxios,
 }
 
 const contextSymbol = typeof Symbol === 'function' && Symbol.for
@@ -25,7 +27,9 @@ const contextSymbol = typeof Symbol === 'function' && Symbol.for
 
 export function resetAxiosContext() {
   Object.defineProperty(React, contextSymbol, {
-    value: React.createContext<AxiosContextInterface>({ useConfiguration: () => configDefault }),
+    value: React.createContext<AxiosContextInterface>(
+      { useConfiguration: () => configDefault, useAxiosHook: useAxios },
+    ),
     enumerable: false,
     configurable: true,
     writable: false,

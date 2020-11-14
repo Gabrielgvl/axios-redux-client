@@ -1,9 +1,12 @@
 import React from 'react';
 
+import axios from 'axios';
+import { makeUseAxios } from 'axios-hooks';
 import { getAxiosContext } from './AxiosContext';
 import { QueryEntity, UseConfigInterface } from '../types';
 import entityGenerator, { EntityGenerated } from '../entity/entityGenerator';
 import { configDefault } from '../utils/constants';
+import { requestLogger, responseLogger } from '../utils/logger';
 
 export interface AxiosProviderProps {
     useConfiguration: () => UseConfigInterface,
@@ -22,7 +25,9 @@ export const AxiosProvider: React.FC<AxiosProviderProps> = ({
         let newContext = context;
         if (config && context.config !== config) {
           const fullConfig = { ...configDefault, ...config };
-          const { queries, cruds } = fullConfig;
+          const {
+            queries, cruds, responseHandler, baseUrl, getRequestConfig,
+          } = fullConfig;
           const queryList = Object.entries<QueryEntity>(queries);
           const crudsList = Object.entries<QueryEntity>(cruds);
 
@@ -56,8 +61,30 @@ export const AxiosProvider: React.FC<AxiosProviderProps> = ({
               ...obj,
               [queryName]: entity.adapter,
             }), {});
+
+          const axiosInstance = axios.create({
+            baseURL: baseUrl,
+          });
+          axiosInstance.interceptors.request.use((request) => {
+            let newRequest = request;
+            if (getRequestConfig) {
+              newRequest = getRequestConfig(newRequest);
+            }
+            return requestLogger(newRequest);
+          });
+          axiosInstance.interceptors.response.use((response) => {
+            if (responseHandler) {
+              responseHandler({ response, url: response.config.url });
+            }
+            return responseLogger(response);
+          });
+
+          const useAxiosHook = makeUseAxios({
+            axios: axiosInstance,
+          });
+
           newContext = {
-            slices, adapters, reducers, useConfiguration,
+            slices, adapters, reducers, useConfiguration, useAxiosHook,
           };
         }
         return (

@@ -40,21 +40,16 @@ export interface Cruds {
     [queryName: string]: CrudQuery,
 }
 
-export interface ErrorHandler {
-    message: string
-    type?: 'success' | 'error' | 'info' | 'warning'
-}
-
 export interface ResponseHandlerParams {
     response: AxiosResponse,
-    queryName: string,
+    url: string | undefined,
 }
 
 export interface UseConfigInterface {
     queries?: Queries,
     cruds?: Cruds,
     baseUrl: string,
-    responseHandler?: ({ response, queryName: string }) => ErrorHandler,
+    responseHandler?: (handlerParams: ResponseHandlerParams) => void,
     getRequestConfig?: (requestConfig: AxiosRequestConfig) => AxiosRequestConfig,
 }
 

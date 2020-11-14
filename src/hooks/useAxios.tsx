@@ -1,25 +1,12 @@
 import {
   useEffect, useMemo,
 } from 'react';
-import { makeUseAxios, ResponseValues } from 'axios-hooks';
-import axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
+import { ResponseValues } from 'axios-hooks';
+import { AxiosPromise, AxiosRequestConfig } from 'axios';
 import useWriteCache from './useWriteCache';
 import useReadCache from './useReadCache';
 import { AxiosRefetch, UseAxiosInterface } from '../types';
-import useNotifications from './useNotifications';
-import { requestLogger, responseLogger } from '../utils/logger';
 import useClientConfig from './useClientConfig';
-
-const getAxiosInstance = () => {
-  const axiosInstance = axios.create();
-  axiosInstance.interceptors.request.use(requestLogger);
-  axiosInstance.interceptors.response.use(responseLogger);
-  return axiosInstance;
-};
-
-const useAxiosHook = makeUseAxios({
-  axios: getAxiosInstance(),
-});
 
 const urlRegexp = /&{(\w+)}/g;
 
@@ -46,19 +33,18 @@ const useAxios = (
   } : UseAxiosInterface,
 ): [ResponseValues<any>, (fetchProps?: AxiosRefetch
 ) => AxiosPromise ] => {
-  const { baseUrl, responseHandler, getRequestConfig } = useClientConfig();
+  const { baseUrl, useAxiosHook, getRequestConfig } = useClientConfig();
   const {
     setAll, addOne, upsertOne,
   } = useWriteCache(queryName);
   const { selectedAll, selectedById } = useReadCache(queryName, params[idProperty]);
-  const { addNotification } = useNotifications();
 
   const requestConfig = useMemo(() => {
     const defaultRequestConfig: AxiosRequestConfig = {
       url: baseUrl + replaceUrl(url, params),
       method,
       validateStatus(status) {
-        return status >= 200 && status < 500;
+        return status >= 200;
       },
       ...options,
     };
@@ -99,14 +85,8 @@ const useAxios = (
           console.log('Not Implemented');
       }
     }
-    if (responseHandler) {
-      const notification = responseHandler({ response, queryName });
-      if (notification) {
-        addNotification(notification);
-      }
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [response, loading, error]);
+  }, [response]);
 
   return [{
     response, error, data: selectedById || selectedAll || data, loading,
